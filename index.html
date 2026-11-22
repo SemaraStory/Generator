@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Serbaguna - Bikin Barcode, QR Code, Password, File Gratis</title>
+<meta name="description" content="Generator Serbaguna gratis. Bikin barcode berbagai bentuk, QR Code dari link dan tulisan, password aman, warna, dan alat file. Tanpa login.">
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7fb;color:#111827}
+header{background:#4f46e5;color:#fff;padding:22px 16px;text-align:center}
+header h1{margin:0;font-size:28px} header p{margin:6px 0 0;opacity:.9;font-size:14px}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px;background:#fff;position:sticky;top:0;z-index:10;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+nav button{border:1px solid #e5e7eb;background:#f9fafb;padding:9px 14px;border-radius:999px;cursor:pointer;font-weight:600}
+nav button.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+main{max-width:900px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 20px rgba(0,0,0,.05);margin-bottom:16px;display:none}
+.card.active{display:block}
+.card h2{margin:0 0 6px} .muted{color:#6b7280;font-size:14px;margin:0 0 14px}
+label{font-weight:600;font-size:13px;display:block;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:10px;font-size:15px}
+textarea{min-height:90px}
+.btn{background:#4f46e5;color:#fff;border:0;padding:11px 16px;border-radius:10px;cursor:pointer;font-weight:700;width:100%;margin-top:12px}
+.btn.secondary{background:#111827} .btn.green{background:#059669} .btn.outline{background:#fff;color:#111827;border:1px solid #d1d5db}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:600px){.row{grid-template-columns:1fr}}
+.result{margin-top:14px;background:#f9fafb;border:1px dashed #d1d5db;border-radius:12px;padding:14px;text-align:center;overflow:auto}
+.output-box{background:#111827;color:#a7f3d0;padding:14px;border-radius:10px;word-break:break-all;font-family:monospace;margin-top:12px}
+.pal{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px} .sw{flex:1;min-width:90px;height:80px;border-radius:12px;display:flex;align-items:flex-end;justify-content:center;padding:8px;color:#fff;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+footer{text-align:center;color:#6b7280;font-size:13px;padding:20px}
+.badge{display:inline-block;background:#eef2ff;color:#4f46e5;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.kpi{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px} .kpi div{background:#f9fafb;border-radius:12px;padding:12px;text-align:center} .kpi b{font-size:20px;display:block}
+</style>
+</head>
+<body>
+<header>
+<h1>⚡ Generator Serbaguna</h1>
+<p>Bikin Barcode, QR Code, Password, Warna & File — Gratis, Tanpa Login</p>
+</header>
+<nav id="nav">
+<button class="active" onclick="showTab('barcode',this)">Barcode</button>
+<button onclick="showTab('qr',this)">QR Code</button>
+<button onclick="showTab('password',this)">Password</button>
+<button onclick="showTab('warna',this)">Warna</button>
+<button onclick="showTab('file',this)">File</button>
+<button onclick="showTab('teks',this)">Teks</button>
+<button onclick="showTab('tentang',this)">Tentang</button>
+</nav>
+<main>
+<div class="card active" id="barcode">
+<span class="badge">PALING DICARI</span>
+<h2>Barcode Studio</h2><p class="muted">Bikin barcode buat label produk, harga jualan, stok, dan inventaris. Ketik tulisan / angka, pilih bentuk, langsung jadi.</p>
+<label>Tulisan / Angka / Link</label><input id="barcodeText" value="8991234567890" placeholder="Contoh: 8991234567890 atau TOKO-001">
+<label>Bentuk Barcode</label><select id="barcodeFormat"><option value="CODE128">CODE128 - Umum, bisa huruf & angka</option><option value="EAN13">EAN13 - Barcode produk 13 angka</option><option value="CODE39">CODE39 - Kode gudang / stok</option><option value="UPC">UPC - Barcode Amerika</option></select>
+<button class="btn" onclick="makeBarcode()">Buat Barcode</button>
+<div class="result"><svg id="barcodeSvg"></svg><p id="barcodeMsg" class="muted">Klik Buat Barcode untuk melihat hasil.</p></div>
+<div class="row"><button class="btn green" onclick="downloadBarcodePNG()">Unduh PNG</button><button class="btn secondary" onclick="downloadBarcodeSVG()">Unduh SVG</button></div>
+<p class="muted">Tips: Buat label produk pakai EAN13. Buat kode stok / rak pakai CODE39 atau CODE128.</p>
+</div>
+
+<div class="card" id="qr">
+<h2>QR Code Generator</h2><p class="muted">Bikin QR dari link, teks, nomor WA, atau apa saja. Cocok buat link jualan, menu, dan pembayaran.</p>
+<label>Link / Tulisan</label><textarea id="qrText">https://semarastory.github.io/Generator/</textarea>
+<button class="btn" onclick="makeQR()">Buat QR Code</button>
+<div class="result"><canvas id="qrCanvas" width="220" height="220" style="max-width:100%"></canvas><p class="muted" id="qrMsg">QR akan muncul di sini.</p></div>
+<button class="btn green" onclick="downloadQR()">Unduh QR PNG</button>
+</div>
+
+<div class="card" id="password">
+<h2>Password Aman</h2><p class="muted">Bikin password yang susah ditebak tapi gampang disalin.</p>
+<label>Panjang: <span id="passLenLabel">16</span> karakter</label><input type="range" id="passLen" min="8" max="32" value="16" oninput="document.getElementById('passLenLabel').innerText=this.value">
+<div class="row"><label><input type="checkbox" id="useUpper" checked style="width:auto"> Huruf Besar</label><label><input type="checkbox" id="useNum" checked style="width:auto"> Angka</label></div>
+<div class="row"><label><input type="checkbox" id="useSym" checked style="width:auto"> Simbol</label><label><input type="checkbox" id="useLower" checked style="width:auto"> Huruf Kecil</label></div>
+<button class="btn" onclick="makePass()">Buat Password Baru</button>
+<div class="output-box" id="passOut">Klik tombol di atas</div>
+<button class="btn secondary" onclick="copyText('passOut')">Salin Password</button>
+</div>
+
+<div class="card" id="warna">
+<h2>Generator Warna & Palet</h2><p class="muted">Buat warna buat desain, logo, dan jualan.</p>
+<label>Pilih Warna</label><input type="color" id="colorPick" value="#4f46e5" style="height:50px">
+<button class="btn" onclick="makePalette()">Buat Palet 5 Warna</button>
+<div class="pal" id="palette"></div>
+<div class="output-box" id="colorOut">#4f46e5</div>
+<button class="btn secondary" onclick="copyText('colorOut')">Salin Kode Warna</button>
+</div>
+
+<div class="card" id="file">
+<h2>Alat File</h2><p class="muted">Bikin file, rapikan nama file, dan hitung ukuran file — langsung dari browser, tanpa upload.</p>
+<h3>1. Bikin File dari Teks</h3>
+<label>Nama File</label><input id="fileName" value="daftar-harga">
+<label>Isi File</label><textarea id="fileContent">Nama, Harga
+Baju, 50000
+Celana, 75000</textarea>
+<label>Tipe File</label><select id="fileType"><option value="txt">TXT - Teks biasa</option><option value="csv">CSV - Bisa dibuka di Excel</option><option value="html">HTML - Halaman web</option></select>
+<button class="btn green" onclick="makeFile()">Unduh File</button>
+<hr>
+<h3>2. Nama File Otomatis untuk Jualan</h3>
+<label>Nama Produk</label><input id="prodName" value="Baju Anak" placeholder="Contoh: Baju Anak">
+<label>Kode / Tanggal</label><input id="prodCode" value="001" placeholder="001">
+<button class="btn" onclick="makeFileName()">Buat Nama File Rapi</button>
+<div class="output-box" id="fileNameOut">baju-anak-001.jpg</div>
+<hr>
+<h3>3. Hitung Ukuran Teks / File</h3>
+<label>Paste Teks di Sini</label><textarea id="sizeText" placeholder="Paste teks..."></textarea>
+<button class="btn secondary" onclick="calcSize()">Hitung Ukuran</button>
+<div class="kpi"><div><b id="charCount">0</b>Karakter</div><div><b id="wordCount">0</b>Kata</div><div><b id="byteCount">0 B</b>Ukuran</div></div>
+<hr>
+<h3>4. Kecilin Teks (Compress Teks)</h3>
+<label>Teks Panjang</label><textarea id="compressIn" placeholder="Paste teks panjang..."></textarea>
+<button class="btn" onclick="compressText()">Kecilin Teks</button>
+<div class="output-box" id="compressOut">Hasil akan muncul di sini</div>
+</div>
+
+<div class="card" id="teks">
+<h2>Alat Teks</h2><p class="muted">Hitung kata, ubah huruf besar kecil, dan rapikan teks.</p>
+<label>Teks Kamu</label><textarea id="teksIn" placeholder="Tulis atau paste teks di sini..."></textarea>
+<div class="row"><button class="btn" onclick="toUpper()">JADI HURUF BESAR</button><button class="btn secondary" onclick="toLower()">jadi huruf kecil</button></div>
+<button class="btn outline" onclick="countTeks()">Hitung Kata & Karakter</button>
+<div class="output-box" id="teksOut">Hasil akan muncul di sini</div>
+</div>
+
+<div class="card" id="tentang">
+<h2>Tentang Generator Serbaguna</h2>
+<p>Aplikasi Generator Serbaguna adalah alat online gratis untuk membuat barcode berbagai bentuk, QR Code dari link dan tulisan, mengecilkan ukuran file, membuat password aman, dan berbagai generator berguna lainnya.</p>
+<p>Dibuat untuk pelajar, pelaku usaha, dan siapa saja yang butuh alat cepat tanpa ribet. Tinggal buka, ketik, langsung jadi. Tanpa login, tanpa install.</p>
+<h3>Kebijakan Privasi</h3><p class="muted">Semua proses dilakukan di browser kamu. Kami tidak menyimpan isi barcode, QR, password, atau file yang kamu buat di server. Data kamu tetap di perangkat kamu.</p>
+<h3>Kontak</h3><p class="muted">Hubungi kami lewat GitHub: semarastory.github.io/Generator/</p>
+<p class="muted">Versi ini adalah versi statis khusus GitHub Pages. Semua fitur jalan tanpa server.</p>
+</div>
+</main>
+<footer>© 2026 Generator Serbaguna • Bikin Barcode, QR, Password & File Gratis</footer>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+function showTab(id, btn){ document.querySelectorAll('.card').forEach(c=>c.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+function makeBarcode(){ try{ const v=document.getElementById('barcodeText').value.trim()||'123456789'; const f=document.getElementById('barcodeFormat').value; JsBarcode('#barcodeSvg', v, {format:f, lineColor:'#111827', background:'#ffffff', displayValue:true, width:2, height:90, margin:10}); document.getElementById('barcodeMsg').innerText='Berhasil dibuat: '+v; }catch(e){ document.getElementById('barcodeMsg').innerText='Gagal: '+e.message+' Coba ganti bentuk barcode atau isi angka yang valid.'; } }
+function downloadBarcodeSVG(){ const svg=document.getElementById('barcodeSvg'); const blob=new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'}); dl(URL.createObjectURL(blob),'barcode.svg'); }
+function downloadBarcodePNG(){ const svg=document.getElementById('barcodeSvg'); const xml=new XMLSerializer().serializeToString(svg); const img=new Image(); img.onload=function(){ const c=document.createElement('canvas'); c.width=img.width||600; c.height=140; const ctx=c.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,0,0); c.toBlob(b=>dl(URL.createObjectURL(b),'barcode.png')); }; img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(xml))); }
+function dl(url, name){ const a=document.createElement('a'); a.href=url; a.download=name; a.click(); }
+function makeQR(){ const txt=document.getElementById('qrText').value.trim()||'https://example.com'; const canvas=document.getElementById('qrCanvas'); if(window.QRCode){ QRCode.toCanvas(canvas, txt, {width:220, margin:1}, function(err){ document.getElementById('qrMsg').innerText=err?('Gagal: '+err):('Berhasil: '+txt); }); } else { document.getElementById('qrMsg').innerText='Library QR belum ke-load, cek internet kamu lalu refresh.'; } }
+function downloadQR(){ const c=document.getElementById('qrCanvas'); const a=document.createElement('a'); a.download='qrcode.png'; a.href=c.toDataURL('image/png'); a.click(); }
+function makePass(){ const len=parseInt(document.getElementById('passLen').value); let chars=''; if(document.getElementById('useLower').checked) chars+='abcdefghijklmnopqrstuvwxyz'; if(document.getElementById('useUpper').checked) chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ'; if(document.getElementById('useNum').checked) chars+='0123456789'; if(document.getElementById('useSym').checked) chars+='!@#$%^&*'; let out=''; for(let i=0;i<len;i++) out+=chars[Math.floor(Math.random()*chars.length)]; document.getElementById('passOut').innerText=out; }
+function copyText(id){ const t=document.getElementById(id).innerText; navigator.clipboard.writeText(t).then(()=>alert('Disalin: '+t)); }
+function makePalette(){ const base=document.getElementById('colorPick').value; document.getElementById('colorOut').innerText=base; const pal=document.getElementById('palette'); pal.innerHTML=''; for(let i=0;i<5;i++){ const c='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0'); const d=document.createElement('div'); d.className='sw'; d.style.background=c; d.innerText=c; d.onclick=()=>{document.getElementById('colorOut').innerText=c; navigator.clipboard.writeText(c);}; pal.appendChild(d);} const b=document.createElement('div'); b.className='sw'; b.style.background=base; b.innerText=base; pal.prepend(b); }
+function makeFile(){ const name=document.getElementById('fileName').value.trim()||'file'; const content=document.getElementById('fileContent').value; const type=document.getElementById('fileType').value; const blob=new Blob([content],{type:'text/plain'}); dl(URL.createObjectURL(blob), name+'.'+type); }
+function makeFileName(){ const p=(document.getElementById('prodName').value||'produk').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); const code=document.getElementById('prodCode').value||'001'; document.getElementById('fileNameOut').innerText=p+'-'+code+'.jpg'; }
+function calcSize(){ const t=document.getElementById('sizeText').value; const bytes=new Blob([t]).size; document.getElementById('charCount').innerText=t.length; document.getElementById('wordCount').innerText=t.trim()?t.trim().split(/\s+/).length:0; document.getElementById('byteCount').innerText=bytes>=1024?(bytes/1024).toFixed(1)+' KB':bytes+' B'; }
+function compressText(){ const t=document.getElementById('compressIn').value; const out=t.replace(/\s+/g,' ').trim(); document.getElementById('compressOut').innerText=out||'Teks kosong'; }
+function toUpper(){ document.getElementById('teksOut').innerText=document.getElementById('teksIn').value.toUpperCase(); }
+function toLower(){ document.getElementById('teksOut').innerText=document.getElementById('teksIn').value.toLowerCase(); }
+function countTeks(){ const t=document.getElementById('teksIn').value; document.getElementById('teksOut').innerText='Karakter: '+t.length+' | Kata: '+(t.trim()?t.trim().split(/\s+/).length:0)+' | Baris: '+t.split('\n').length; }
+window.onload=function(){ makeBarcode(); makeQR(); makePass(); };
+</script>
+</body>
+</html>
